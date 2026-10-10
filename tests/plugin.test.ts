@@ -77,3 +77,11 @@ describe('pro facade', () => {
 		expect(PRO_UI.priceText).toBe('Sponsor $5 a month, or $15 once. When you have paid $15 in total, Pro stays on.');
 	});
 });
+
+describe('timeStamp', () => {
+	it('formats local time as YYYY-MM-DD HHmm with zero padding', async () => {
+		const { timeStamp } = await import('../src/main');
+		expect(timeStamp(new Date(2026, 0, 5, 7, 3))).toBe('2026-01-05 0703');
+		expect(timeStamp(new Date(2026, 11, 31, 23, 59))).toBe('2026-12-31 2359');
+	});
+});

@@ -117,7 +117,7 @@ export default class TableRollupPlugin extends Plugin {
 		}
 		const r = view.last;
 		if (!r) return null;
-		const stamp = window.moment().format('YYYY-MM-DD HHmm');
+		const stamp = timeStamp(new Date());
 		const title = `${(view.config.name || 'Table rollup').replace(/[\\/:*?"<>|#^[\]]/g, ' ').trim()} ${stamp}`;
 		const ext = kind === 'markdown' ? 'md' : 'csv';
 		const body = kind === 'markdown' ? `# ${title}\n\n${r.rows.length} rows from ${r.sources} notes.\n\n${toMarkdown(r, view.lastShowSource)}` : toCsv(r, view.lastShowSource);
@@ -130,4 +130,10 @@ export default class TableRollupPlugin extends Plugin {
 		if (kind === 'markdown') await this.app.workspace.getLeaf('tab').openFile(file);
 		return file;
 	}
+}
+
+const pad2 = (n: number): string => String(n).padStart(2, '0');
+/** Local time as YYYY-MM-DD HHmm. Plain Date, so the code does not depend on the moment types. */
+export function timeStamp(d: Date): string {
+	return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())} ${pad2(d.getHours())}${pad2(d.getMinutes())}`;
 }
