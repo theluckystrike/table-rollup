@@ -74,6 +74,6 @@ describe('pro facade', () => {
 	it('the free note limit is 50 and the sponsor terms match product.yaml', () => {
 		expect(FREE_MAX_SOURCES).toBe(50);
 		expect(SPONSORS).toMatchObject({ clientId: 'Ov23lic5UPGPZqhBlBGg', sponsorLogin: 'theluckystrike', minMonthlyUsd: 5, oneTimeUsd: 15, scope: 'read:user' });
-		expect(PRO_UI.priceText).toBe('Sponsor $5 a month or $15 once.');
+		expect(PRO_UI.priceText).toBe('Sponsor $5 a month, or $15 once. When you have paid $15 in total, Pro stays on.');
 	});
 });

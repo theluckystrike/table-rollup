@@ -74,11 +74,11 @@ The free version merges the tables under one heading from up to 50 notes that ha
 
 Pro removes the 50-note limit and adds summary rows, group subtotals, row filters, export to Markdown or CSV, and the task list rollup. To get it:
 
-1. Sponsor [theluckystrike on GitHub Sponsors](https://github.com/sponsors/theluckystrike) with $5 a month or more, or with $15 or more once. A one-time sponsorship of $15 or more turns Pro on for life.
+1. Sponsor [theluckystrike on GitHub Sponsors](https://github.com/sponsors/theluckystrike) with $5 a month, or $15 once. When you have paid $15 in total, Pro stays on.
 2. In Obsidian, open the settings of Table Rollup and select "Sign in with GitHub".
 3. The plugin copies a code and opens github.com/login/device. Paste the code there and approve.
 
-The status line then shows your GitHub login and the tier. If you sponsor after you sign in, select Refresh. If a monthly sponsorship ends, Pro turns off at the next check, within 7 days. Your view options stay saved in the base file and work again when Pro is on.
+The status line then shows your GitHub login and the tier. If you sponsor after you sign in, select Refresh. If a monthly sponsorship ends before you have paid $15 in total, Pro turns off at the next check, within 7 days. Your view options stay saved in the base file and work again when Pro is on.
 
 ## Settings
 
@@ -117,13 +117,13 @@ In the end-to-end test with 500 notes and 2,000 rows, a full draw took 15 to 164
 
 ## Payment, account and network
 
-The core features are free and stay free. Pro features need a GitHub Sponsors sponsorship of theluckystrike: $5 a month or more, or $15 or more once (Pro for life). Your notes stay readable and editable with or without Pro.
+The core features are free and stay free. Pro features need a GitHub Sponsors sponsorship of theluckystrike: $5 a month or more, or $15 once. When you have paid $15 in total, Pro stays on. Your notes stay readable and editable with or without Pro.
 
 GitHub handles the payment. Sponsor at https://github.com/sponsors/theluckystrike. You need no account for the free features. Pro needs the GitHub account that sponsors.
 
 Until you select "Sign in with GitHub" in the settings, Table Rollup makes no network requests. Sign in uses the GitHub device flow. Table Rollup sends its public client ID and the scope `read:user` to `https://github.com/login/device/code` and shows you a code. While you enter the code at https://github.com/login/device, it asks `https://github.com/login/oauth/access_token` every few seconds whether sign in is done. The scope `read:user` is read-only access to your profile, which GitHub needs to show the sponsorship tier. It gives no access to repositories and no write access.
 
-After sign in, Table Rollup sends one query to `https://api.github.com/graphql`: does the signed-in account sponsor theluckystrike, and at which tier. It asks again at most once every 7 days, or when you select Refresh. It sends no note content, file names or other vault data, and it has no telemetry.
+After sign in, Table Rollup sends one query to `https://api.github.com/graphql`: does the signed-in account sponsor theluckystrike, at which tier, and how much it has paid theluckystrike in total. It asks again at most once every 7 days, or when you select Refresh. It sends no note content, file names or other vault data, and it has no telemetry.
 
 Pro keeps working for 14 days without a successful check. The GitHub token stays in the secret storage of Obsidian on this device. It is not written to data.json or other vault files, so it does not sync or reach a git repository. The local storage of this device keeps your GitHub login, the tier and the time of the last check. Sign out deletes the token. You can also revoke the access in your GitHub settings, under Applications.
 

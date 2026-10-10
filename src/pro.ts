@@ -16,7 +16,7 @@ export const SPONSORS: SponsorsConfig = {
 
 export const PRO_UI = {
 	proSummary: 'Pro removes the 50-note limit and adds summary rows, group subtotals, row filters, export to Markdown or CSV, and the task list rollup.',
-	priceText: 'Sponsor $5 a month or $15 once.',
+	priceText: 'Sponsor $5 a month, or $15 once. When you have paid $15 in total, Pro stays on.',
 };
 
 /** Free tier: the largest number of notes that give rows to one merged table. */
