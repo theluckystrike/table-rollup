@@ -51,6 +51,7 @@ export default class TableRollupPlugin extends Plugin {
 		this.addExportCommand('export-markdown', 'Export the merged table as a Markdown note', 'markdown');
 		this.addExportCommand('export-csv', 'Export the merged table as a CSV file', 'csv');
 		this.app.workspace.onLayoutReady(() => {
+			void this.reopenStaleBases();
 			void pro.refresh();
 			this.registerInterval(window.setInterval(() => void pro.refresh(), PRO_TICK_MS));
 		});
@@ -59,6 +60,24 @@ export default class TableRollupPlugin extends Plugin {
 	onunload(): void {
 		resetPro();
 		this.cache.clear();
+	}
+
+	/**
+	 * After a plugin update or reload, Bases keeps showing the rollup views of the old plugin code: they miss Pro and
+	 * the export commands. This opens each such base tab again, so its view runs the current code. A first start finds none.
+	 */
+	async reopenStaleBases(): Promise<number> {
+		let n = 0;
+		for (const leaf of this.app.workspace.getLeavesOfType('bases')) {
+			const el = leaf.view.containerEl;
+			const stale = el.querySelector('.table-rollup') !== null && ![...this.views].some((v) => el.contains(v.containerEl));
+			if (!stale) continue;
+			const state = leaf.getViewState();
+			await leaf.setViewState({ type: 'empty' });
+			await leaf.setViewState(state);
+			n++;
+		}
+		return n;
 	}
 
 	private addExportCommand(id: string, name: string, kind: 'markdown' | 'csv'): void {

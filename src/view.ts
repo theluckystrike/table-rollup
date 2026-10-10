@@ -28,13 +28,20 @@ export class RollupView extends BasesView implements HoverParent {
 
 	constructor(
 		controller: QueryController,
-		private readonly containerEl: HTMLElement,
+		readonly containerEl: HTMLElement,
 		private readonly plugin: TableRollupPlugin,
 	) {
 		super(controller);
 		this.containerEl.addClass('table-rollup');
 		// Bases hides an empty view container in embeds and then never loads it, so the view starts with a line of text.
 		this.containerEl.createDiv({ cls: 'table-rollup-empty', text: 'Reading tables...' });
+	}
+
+	/**
+	 * Events go here, not in the constructor: Bases can unload a view and load the same object again (for example
+	 * when the plugin reloads with a base open), and an unload removes everything that was registered.
+	 */
+	onload(): void {
 		this.plugin.views.add(this);
 		this.registerEvent(
 			this.app.metadataCache.on('changed', (file) => {
@@ -42,6 +49,7 @@ export class RollupView extends BasesView implements HoverParent {
 			}),
 		);
 		this.register(onProChange(() => this.schedule(0)));
+		if (this.last) this.schedule(0);
 	}
 
 	onunload(): void {
