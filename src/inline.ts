@@ -16,7 +16,7 @@ const RULES: { re: RegExp; make: (m: RegExpExecArray) => Token }[] = [
 		re: /^!?\[\[([^\]|#^]*)((?:[#^][^\]|]*)?)(?:\|([^\]]*))?\]\]/,
 		make: (m) => ({ kind: 'wikilink', target: m[1]! + m[2]!, text: m[3] ?? (m[1]! + m[2]!.replace(/^[#^]/, ' > ')).trim() }),
 	},
-	{ re: /^\[([^\]]+)\]\(([^)\s]+)\)/, make: (m) => ({ kind: 'link', href: m[2]!, text: m[1]! }) },
+	{ re: /^\[([^\]]+)\]\(((?:[^()\s]|\([^()\s]*\))+)\)/, make: (m) => ({ kind: 'link', href: m[2]!, text: m[1]! }) },
 	{ re: /^\*\*(?=\S)([\s\S]*?\S)\*\*/, make: (m) => ({ kind: 'strong', text: m[1]! }) },
 	{ re: /^__(?=\S)([\s\S]*?\S)__/, make: (m) => ({ kind: 'strong', text: m[1]! }) },
 	{ re: /^\*(?=\S)([\s\S]*?\S)\*/, make: (m) => ({ kind: 'em', text: m[1]! }) },

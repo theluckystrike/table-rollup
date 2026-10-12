@@ -1,5 +1,11 @@
 # table-rollup
 
+## 1.1.1
+
+### Patch Changes
+
+- 417a134: A link target with a percent sign or with parentheses no longer stops the draw or cuts the link, script and data URLs in cells show as text, and a summary of a very large column no longer overflows the stack.
+
 ## 1.1.0
 
 ### Minor Changes

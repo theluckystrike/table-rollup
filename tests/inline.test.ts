@@ -41,4 +41,10 @@ describe('tokenize', () => {
 	it('unclosed markers stay text', () => {
 		expect(tokenize('**open and `tick')).toEqual([{ kind: 'text', text: '**open and `tick' }]);
 	});
+	it('a link target keeps one level of balanced parentheses', () => {
+		expect(tokenize('[A](https://en.wikipedia.org/wiki/A_(b)) end')).toEqual([
+			{ kind: 'link', href: 'https://en.wikipedia.org/wiki/A_(b)', text: 'A' },
+			{ kind: 'text', text: ' end' },
+		]);
+	});
 });

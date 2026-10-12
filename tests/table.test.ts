@@ -185,3 +185,12 @@ describe('find', () => {
 		expect(r.rows.map((x) => x.cells[0])).toEqual(['Plan launch']);
 	});
 });
+
+describe('summarize on a large column', () => {
+	it('gives the sum, min and max of 200,000 cells without a stack overflow', () => {
+		const cells = Array.from({ length: 200_000 }, (_, i) => String(i % 10) + '.5');
+		expect(summarize(cells, 'sum')).toBe('1000000');
+		expect(summarize(cells, 'min')).toBe('0.5');
+		expect(summarize(cells, 'max')).toBe('9.5');
+	});
+});

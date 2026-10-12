@@ -54,3 +54,38 @@ describe('find box in the view', () => {
 		expect(set).not.toHaveBeenCalled();
 	});
 });
+
+describe('links in cells', () => {
+	function drawCell(cell: string): HTMLElement {
+		const el = document.createElement('div');
+		document.body.appendChild(el);
+		const plugin = { views: new Set(), settings: { debounceMs: 300 } };
+		const view = new RollupView({} as never, el, plugin as never);
+		const md = `| Item |\n|---|\n| ${cell} |\n`;
+		(view as never as { draw: (r: unknown, o: unknown) => void }).draw(rollup([{ path: 'a.md', markdown: md }]), view.options());
+		return el;
+	}
+
+	it('draws the row when a link target holds a percent sign that is not an escape', () => {
+		const el = drawCell('[Q3 report](Q3-100%.md)');
+		const a = el.querySelector('tbody td:not(.table-rollup-source) a');
+		expect(a?.textContent).toBe('Q3 report');
+		expect(a?.getAttribute('data-href')).toBe('Q3-100%.md');
+	});
+
+	it('does not make a clickable link from a javascript, vbscript or data URL', () => {
+		for (const href of ['javascript:alert(1)', 'JavaScript:alert(1)', 'vbscript:x', 'data:text/html,x']) {
+			const el = drawCell(`[click](${href})`);
+			const td = el.querySelector('tbody td:not(.table-rollup-source)')!;
+			expect(td.querySelector('a')).toBeNull();
+			expect(td.textContent).toBe('click');
+			el.remove();
+		}
+	});
+
+	it('keeps web links as external links', () => {
+		const el = drawCell('[site](https://example.com/a)');
+		const a = el.querySelector<HTMLAnchorElement>('a.external-link');
+		expect(a?.getAttribute('href')).toBe('https://example.com/a');
+	});
+});

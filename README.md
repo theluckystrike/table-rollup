@@ -52,7 +52,7 @@ Set Read to Tasks to collect the task list items under a heading instead of a ta
 
 ### Export to a note or CSV (Pro)
 
-Export the merged table, with its filter and sort, to a new Markdown note or a CSV file. The Markdown table links each row back to its source note and ends with the summary row. Use the buttons above the table or the two export commands.
+Export the merged table, with its filter and sort, to a new Markdown note or a CSV file. With the Source column on, each Markdown row links to its source note. A summary row, if set, ends the Markdown table, not the CSV file. Use the buttons above the table or the two export commands.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/table-rollup/HEAD/docs/export.png" alt="A new note that holds the exported Markdown table with source links" width="720">
 
@@ -69,7 +69,6 @@ To install by hand, copy `main.js`, `manifest.json` and `styles.css` from the la
 1. Create a base, or open one. Set its filters so that it selects the notes with your tables, for example a folder or a tag.
 2. Select the view menu in the base toolbar and add a view of the type "Table rollup".
 3. Open the view options. In "Under heading", type the heading above your tables, for example `Action items`.
-4. To narrow the table, type in the "Find rows" box above it.
 
 Table Rollup uses the first table under that heading in each note, including tables in sub-sections. Leave "Under heading" empty to use the first table of each note. Tables in code blocks and in the front matter are ignored. Tables inside callouts and quotes are read.
 

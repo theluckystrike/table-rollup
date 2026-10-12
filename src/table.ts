@@ -327,11 +327,12 @@ export function summarize(cells: string[], fn: SummaryFn): string | null {
 	const nums = filled.map(parseNumber);
 	if (nums.length === 0 || nums.some((n) => n === null)) return null;
 	const values = nums as number[];
-	const places = Math.max(...filled.map(decimals));
+	// reduce, not Math.max(...list): a spread of 100,000 or more values overflows the call stack.
+	const places = filled.reduce((a, c) => Math.max(a, decimals(c)), 0);
 	const sum = values.reduce((a, b) => a + b, 0);
 	if (fn === 'sum') return formatNumber(sum, places);
 	if (fn === 'avg') return formatNumber(sum / values.length, places + 2);
-	return formatNumber(fn === 'min' ? Math.min(...values) : Math.max(...values), places);
+	return formatNumber(values.reduce((a, b) => (fn === 'min' ? Math.min(a, b) : Math.max(a, b))), places);
 }
 
 // ---------------------------------------------------------------- merge, filter, sort, group
