@@ -1,5 +1,11 @@
 # table-rollup
 
+## 1.0.4
+
+### Patch Changes
+
+- efdff8f: Correct the GitHub Sponsors payment, check and token storage text in the README.
+
 ## 1.0.3
 
 ### Patch Changes
