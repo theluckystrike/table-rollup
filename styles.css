@@ -20,6 +20,26 @@
 	color: var(--text-warning);
 }
 
+.table-rollup-find {
+	display: flex;
+	align-items: center;
+	gap: var(--size-2-2);
+	margin-left: auto;
+}
+
+.table-rollup-find-input {
+	width: 140px;
+	font-size: var(--font-ui-smaller);
+}
+
+.table-rollup-find-clear {
+	display: none;
+}
+
+.table-rollup-find.has-text .table-rollup-find-clear {
+	display: inline-flex;
+}
+
 .table-rollup-export {
 	font-size: var(--font-ui-smaller);
 }

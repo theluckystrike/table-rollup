@@ -1,5 +1,11 @@
 # table-rollup
 
+## 1.1.0
+
+### Minor Changes
+
+- 706de62: Add a "Find rows" box to the view bar. The box keeps only the rows whose cells or source note name hold the text, and the summary row adds up the rows that are left. The find text is saved with the view in the base file.
+
 ## 1.0.4
 
 ### Patch Changes

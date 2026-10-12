@@ -212,6 +212,31 @@ describe(`${pluginId} in the real app`, function () {
 		await setPro(false);
 	});
 
+	it('free version: the find box narrows rows and clears back to all', async function () {
+		await obsidianPage.openFile(`${DIR}/Action items.base`);
+		await waitFor((x) => x.rows === 64, 'table not drawn');
+		await browser.execute((n) => {
+			const input = document.querySelector<HTMLInputElement>('.workspace-leaf.mod-active .table-rollup-find-input');
+			if (!input) throw new Error('find box not found');
+			input.value = n;
+			input.dispatchEvent(new Event('input', { bubbles: true }));
+		}, 'Ana');
+		const found = await waitFor((x) => x.rows > 0 && x.rows < 64, 'find box did not narrow the table');
+		expect(found.domRows).toBe(found.rows);
+		expect(found.sources).toBe(20);
+		const kept = await browser.execute(() => {
+			const el = document.querySelector<HTMLElement>('.workspace-leaf.mod-active .table-rollup');
+			const first = el?.querySelector('tbody tr td:nth-child(2)');
+			return { all: Array.from(el?.querySelectorAll('tbody td') ?? []).map((td) => td.textContent ?? ''), firstCell: first?.textContent ?? '' };
+		});
+		expect(kept.all.some((t) => t.toLowerCase().includes('ana'))).toBe(true);
+		await browser.execute(() => {
+			const btn = document.querySelector<HTMLButtonElement>('.workspace-leaf.mod-active .table-rollup-find-clear');
+			btn?.click();
+		});
+		await waitFor((x) => x.rows === 64, 'clear did not restore all rows');
+	});
+
 	it('500 notes: free limit of 50, Pro renders all under 300 ms', async function () {
 		await browser.executeObsidian(async ({ app }) => {
 			await app.vault.createFolder('Perf').catch(() => undefined);

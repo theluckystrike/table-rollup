@@ -6,6 +6,7 @@ import type TableRollupPlugin from './main';
 
 export const VIEW_ID = 'table-rollup';
 const SORT_KEY = 'rollupSort';
+const FIND_KEY = 'rollupFind';
 
 export interface RenderStats {
 	notes: number;
@@ -24,6 +25,7 @@ export class RollupView extends BasesView implements HoverParent {
 	lastShowSource = true;
 	private token = 0;
 	private timer: number | null = null;
+	private findTimer: number | null = null;
 	private paths = new Set<string>();
 
 	constructor(
@@ -55,6 +57,8 @@ export class RollupView extends BasesView implements HoverParent {
 	onunload(): void {
 		this.plugin.views.delete(this);
 		if (this.timer !== null) window.clearTimeout(this.timer);
+		if (this.findTimer !== null) window.clearTimeout(this.findTimer);
+		this.findTimer = null;
 		this.token++;
 	}
 
@@ -88,6 +92,7 @@ export class RollupView extends BasesView implements HoverParent {
 			summary: pro ? ((str('summary') || 'none') as SummaryFn) : 'none',
 			groupBy: pro ? str('groupColumn') : '',
 			filter: pro && str('filterColumn') ? { column: str('filterColumn'), op: (str('filterOp') || 'contains') as FilterOp, value: str('filterValue') } : null,
+			find: str(FIND_KEY),
 			maxSources: pro ? 0 : FREE_MAX_SOURCES,
 		};
 	}
@@ -122,8 +127,29 @@ export class RollupView extends BasesView implements HoverParent {
 
 	private draw(r: Rollup, opts: ReturnType<RollupView['options']>): void {
 		const el = this.containerEl;
+		const active = document.activeElement;
+		const keepFind = active instanceof HTMLInputElement && el.contains(active) && active.classList.contains('table-rollup-find-input');
+		const caret = keepFind ? active.selectionStart : null;
+		// A live update can draw again while the user types: keep the typed text, not the saved one.
+		const typed = keepFind ? active.value : null;
 		el.empty();
-		this.drawBar(el, r);
+		this.drawBar(el, r, opts);
+		if (keepFind) {
+			const input = el.querySelector<HTMLInputElement>('.table-rollup-find-input');
+			if (input) {
+				if (typed !== null && input.value !== typed) {
+					input.value = typed;
+					input.parentElement?.toggleClass('has-text', typed.trim() !== '');
+				}
+				input.focus();
+				const end = caret ?? input.value.length;
+				input.setSelectionRange(end, end);
+			}
+		}
+		if (r.rows.length === 0 && opts.find?.trim()) {
+			el.createDiv({ cls: 'table-rollup-empty', text: `No rows hold "${opts.find.trim()}". Select the X button to show all rows.` });
+			return;
+		}
 		if (r.rows.length === 0) {
 			const where = opts.heading ? `under the heading "${opts.heading}"` : 'in these notes';
 			el.createDiv({ cls: 'table-rollup-empty', text: `No rows. No note in this base has a ${opts.mode === 'tasks' ? 'task' : 'table row'} ${where}.` });
@@ -147,9 +173,36 @@ export class RollupView extends BasesView implements HoverParent {
 		if (r.summary) this.drawSummary(table.createEl('tfoot'), r.summary, opts.showSource, labelOf(opts.summary ?? 'none'), 'table-rollup-total');
 	}
 
-	private drawBar(el: HTMLElement, r: Rollup): void {
+	private drawBar(el: HTMLElement, r: Rollup, opts: ReturnType<RollupView['options']>): void {
 		const bar = el.createDiv({ cls: 'table-rollup-bar' });
 		bar.createSpan({ cls: 'table-rollup-count', text: `${r.rows.length} ${r.rows.length === 1 ? 'row' : 'rows'} from ${r.sources} ${r.sources === 1 ? 'note' : 'notes'}` });
+		const find = bar.createDiv({ cls: 'table-rollup-find' });
+		if ((opts.find ?? '').trim()) find.addClass('has-text');
+		const input = find.createEl('input', {
+			cls: 'table-rollup-find-input',
+			type: 'text',
+			attr: { placeholder: 'Find rows...', 'aria-label': 'Find rows', value: opts.find ?? '', 'data-testid': 'table-rollup-find' },
+		});
+		input.addEventListener('input', () => {
+			find.classList.toggle('has-text', input.value.trim() !== '');
+			if (this.findTimer !== null) window.clearTimeout(this.findTimer);
+			this.findTimer = window.setTimeout(() => {
+				this.findTimer = null;
+				// Read the box that is on screen now: a redraw can replace this input before the wait ends.
+				const now = this.containerEl.querySelector<HTMLInputElement>('.table-rollup-find-input') ?? input;
+				this.config.set(FIND_KEY, now.value);
+				this.schedule(0);
+			}, 200);
+		});
+		const clear = find.createEl('button', { cls: 'table-rollup-find-clear clickable-icon', attr: { 'aria-label': 'Clear find', 'data-testid': 'table-rollup-find-clear' } });
+		setIcon(clear, 'x');
+		clear.addEventListener('click', () => {
+			if (this.findTimer !== null) window.clearTimeout(this.findTimer);
+			this.findTimer = null;
+			input.value = '';
+			this.config.set(FIND_KEY, '');
+			this.schedule(0);
+		});
 		if (r.skippedSources > 0) {
 			bar.createSpan({
 				cls: 'table-rollup-limit',

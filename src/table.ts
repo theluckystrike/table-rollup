@@ -35,6 +35,8 @@ export interface RollupOptions {
 	columns?: string[];
 	sort?: { column: string; dir: 'asc' | 'desc' } | null;
 	filter?: { column: string; op: FilterOp; value: string } | null;
+	/** Text to find. Keeps only rows where a cell or the source note name holds this text, case insensitive. */
+	find?: string;
 	summary?: SummaryFn;
 	/** Column name to group by. "Source" groups by note. */
 	groupBy?: string;
@@ -486,6 +488,10 @@ export function rollup(notes: SourceNote[], options: RollupOptions = {}): Rollup
 		return null;
 	});
 	let rows = picked.flatMap((p) => p.tables.flatMap((t) => mapRows(t, columns, p.path)));
+	if (options.find?.trim()) {
+		const needle = options.find.trim().toLowerCase();
+		rows = rows.filter((r) => r.cells.some((c) => c.toLowerCase().includes(needle)) || noteName(r.source).toLowerCase().includes(needle));
+	}
 	if (options.filter && options.filter.column.trim()) rows = rows.filter((r) => passes(r, columns, options.filter!));
 	if (options.sort && options.sort.column) rows = sortRows(rows, columns, options.sort);
 	const fn = options.summary ?? 'none';

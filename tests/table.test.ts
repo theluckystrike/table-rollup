@@ -149,3 +149,39 @@ describe('export', () => {
 		expect(toCsv(r, false).split('\r\n')[0]).toBe('Item,Amount');
 	});
 });
+
+describe('find', () => {
+	const notes = [
+		{ path: 'Notes/meet-1.md', markdown: '| Item | Owner | Hours |\n|---|---|--:|\n| Write spec | Ann | 3 |\n| Review budget | Ben | 2 |\n' },
+		{ path: 'Notes/meet-2.md', markdown: '| Item | Owner | Hours |\n|---|---|--:|\n| Plan launch | Carl | 5 |\n' },
+	];
+
+	it('keeps only the rows where a cell holds the text, case insensitive', () => {
+		const r = rollup(notes, { find: 'budget' });
+		expect(r.rows.map((x) => x.cells[0])).toEqual(['Review budget']);
+		expect(rollup(notes, { find: 'BUDGET' }).rows.map((x) => x.cells[0])).toEqual(['Review budget']);
+	});
+
+	it('matches the source note name and keeps the summary over the left rows', () => {
+		const r = rollup(notes, { find: 'meet-2', summary: 'sum' });
+		expect(r.rows.length).toBe(1);
+		expect(r.sources).toBe(2);
+		expect(r.summary?.[2]).toBe('5');
+	});
+
+	it('empty or blank find text keeps every row', () => {
+		expect(rollup(notes, { find: '' }).rows.length).toBe(3);
+		expect(rollup(notes, { find: '   ' }).rows.length).toBe(3);
+	});
+
+	it('a text with no match keeps no row and the group counts shrink', () => {
+		const r = rollup(notes, { find: 'zzz', groupBy: 'Owner' });
+		expect(r.rows.length).toBe(0);
+		expect(r.groups).toEqual([]);
+	});
+
+	it('find runs before the Pro column filter and the sort stay consistent', () => {
+		const r = rollup(notes, { find: 'plan', filter: { column: 'Hours', op: 'gt', value: '4' } });
+		expect(r.rows.map((x) => x.cells[0])).toEqual(['Plan launch']);
+	});
+});
