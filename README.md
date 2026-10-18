@@ -1,16 +1,15 @@
 # Table Rollup
 
-Table Rollup merges the Markdown tables from many notes into one table. You keep a small table under the same heading in each note, for example "Action items" in each meeting note. Table Rollup shows those rows together, with a link to the note that each row came from. Your data stays in your notes.
+Table Rollup merges the Markdown tables from many notes into one table. Table Rollup shows those rows together, with a link to the note that each row came from. Your data stays in your notes.
 
-Table Rollup is a view for the core Bases plugin. The base selects the notes, and Table Rollup draws one merged table from their tables. It uses only the public Bases API for plugins.
-
+Table Rollup is a view for the core Bases plugin. The base selects the notes, and Table Rollup draws one merged table from their tables.
 <img src="https://raw.githubusercontent.com/theluckystrike/table-rollup/HEAD/docs/table-rollup.gif" alt="A base of 20 meeting notes shown as one merged table, sorted by hours, then grouped by owner with subtotals" width="720">
 
 ## Features
 
 ### One table from many notes
 
-Each note in the base gives the rows of its table under the heading that you choose. The merged table matches the columns by name. Case, bold text and column order do not matter, so "Owner" and "owner" go into the same column. A column that only some notes have is added at the end. A Source column links to each note. Hover over the link to see a preview, or Ctrl-click (Cmd-click on macOS) to open the note in a new tab.
+Each note in the base gives the rows of its table under the heading that you choose. The merged table matches the columns by name. Case, bold text and column order do not matter, so "Owner" and "owner" go into the same column. A column that only some notes have is added at the end. Repeated column names get a number. The number does not replace a name that you wrote in the source table. A Source column links to each note. Hover over the link to see a preview, or Ctrl-click (Cmd-click on macOS) to open the note in a new tab.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/table-rollup/HEAD/docs/merge-tables.png" alt="Merged table of 64 action items from 20 meeting notes with a Source column" width="720">
 
@@ -34,7 +33,7 @@ When you edit a source note, the merged table draws again after a short delay. Y
 
 ### Summary rows and group subtotals (Pro)
 
-Add a summary row with the sum, average, count, smallest or largest value of each column. Sum, average, min and max apply only to columns where every filled cell is a number. Values such as "$1,200.50" and "12 %" count as numbers. Group the rows by any column, or by Source, to get a subtotal for each group.
+Add a summary row with the sum, average, count, smallest or largest value of each column. Sum, average, min and max apply only to columns where every filled cell is a number. Values such as "$1,200.50", "₫1,000", "$-12" and "12 %" count as numbers. Small values such as `1e-3` keep up to six decimal places in the summary. Group the rows by any column, or by Source, to get a subtotal for each group.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/table-rollup/HEAD/docs/group-subtotals.png" alt="Rows grouped by owner with a subtotal of hours per owner and a grand total" width="720">
 
@@ -72,7 +71,7 @@ To install by hand, copy `main.js`, `manifest.json` and `styles.css` from the la
 
 Table Rollup uses the first table under that heading in each note, including tables in sub-sections. Leave "Under heading" empty to use the first table of each note. Tables in code blocks and in the front matter are ignored. Tables inside callouts and quotes are read.
 
-The cells can hold links, tags, inline code, bold and italic text. A pipe inside inline code, inside a wikilink alias or written as `\|` stays in its cell.
+The cells can hold links, tags, inline code, bold and italic text. Empty cells stay empty. Cell spans from HTML or table merge plugins are not interpreted. A pipe inside inline code, inside a wikilink alias or written as `\|` stays in its cell.
 
 ## Pro
 
@@ -117,10 +116,6 @@ Dataview reads properties and inline fields, not Markdown tables.
 ### How is this different from SQLSeal and Block View?
 
 SQLSeal reads a Markdown table, but you write one query line for each file and edit it when a new note joins. Block View lists matching blocks from many notes, but it shows each table on its own, without merged columns, column sort or totals.
-
-### How fast is it?
-
-In the end-to-end test with 500 notes and 2,000 rows, a full draw took 15 to 164 ms on an M3 Pro Mac.
 
 ## Payment, account and network
 

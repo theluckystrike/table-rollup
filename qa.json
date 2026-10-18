@@ -3,7 +3,7 @@
 		"feature": "merge-tables",
 		"caption": "Twenty meeting notes, one merged table: every row of the Action items tables, with a link to the note it came from.",
 		"note": "Action items.base",
-		"eval": "(async () => { app.plugins.plugins['table-rollup'].pro.signOut(); await new Promise((r) => setTimeout(r, 700)); return 'ok'; })()",
+		"eval": "(async () => { const kept = app.workspace.getMostRecentLeaf(); for (const leaf of [...app.workspace.getLeavesOfType('markdown'), ...app.workspace.getLeavesOfType('bases')]) if (leaf !== kept) leaf.detach(); app.workspace.setActiveLeaf(kept, { focus: true });  app.plugins.plugins['table-rollup'].pro.signOut(); await new Promise((r) => setTimeout(r, 700)); return 'ok'; })()",
 		"wait": 900
 	},
 	{
@@ -18,7 +18,7 @@
 		"feature": "find-rows",
 		"caption": "The find box narrows the table to the rows whose cells hold the text.",
 		"note": "Action items.base",
-		"eval": "(async () => { app.plugins.plugins['table-rollup'].pro.signOut(); await new Promise((r) => setTimeout(r, 700)); const input = document.querySelector('.workspace-leaf.mod-active .table-rollup-find-input'); input.value = 'status'; input.dispatchEvent(new Event('input', { bubbles: true })); await new Promise((r) => setTimeout(r, 900)); return 'ok'; })()",
+		"eval": "(async () => { app.plugins.plugins['table-rollup'].pro.signOut(); await new Promise((r) => setTimeout(r, 700)); const input = document.querySelector('.workspace-leaf.mod-active .table-rollup-find-input'); input.value = 'budget'; input.dispatchEvent(new Event('input', { bubbles: true })); await new Promise((r) => setTimeout(r, 900)); return 'ok'; })()",
 		"after": "(async () => { const btn = document.querySelector('.workspace-leaf.mod-active .table-rollup-find-clear'); if (btn) btn.click(); return 'ok'; })()",
 		"wait": 900
 	},

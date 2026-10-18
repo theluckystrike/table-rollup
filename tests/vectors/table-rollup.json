@@ -795,6 +795,53 @@
      }
     ]
    }
+  },
+  {
+   "name": "repeated headers keep authored numeric suffixes",
+   "args": [
+    [
+     {
+      "path": "a.md",
+      "markdown": "| Amount | Amount | Amount (2) |\n|---|---|---|\n|1|2|3|"
+     }
+    ],
+    {}
+   ],
+   "expected": {
+    "columns": [
+     "Amount",
+     "Amount (3)",
+     "Amount (2)"
+    ],
+    "rows": [
+     [
+      "a.md",
+      "1",
+      "2",
+      "3"
+     ]
+    ]
+   }
+  },
+  {
+   "name": "Unicode currencies and exponent precision in sums",
+   "args": [
+    [
+     {
+      "path": "a.md",
+      "markdown": "| Amount | Small |\n|---|---|\n|₫1,000|1e-3|\n|₩2,000|2e-3|"
+     }
+    ],
+    {
+     "summary": "sum"
+    }
+   ],
+   "expected": {
+    "summary": [
+     "3000",
+     "0.003"
+    ]
+   }
   }
  ]
 }

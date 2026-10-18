@@ -1,5 +1,11 @@
 # table-rollup
 
+## 1.1.3
+
+### Patch Changes
+
+- 880d827: Keep table columns when repeated headers match a written suffix. Read Unicode currency signs. Keep small exponent values in summary rows.
+
 ## 1.1.2
 
 ### Patch Changes

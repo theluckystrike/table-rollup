@@ -286,7 +286,7 @@ export function findTasks(markdown: string, heading: string): ParsedTable {
 
 /** Number in a cell: 1,234.5  $12  12 %  -3  (4.50)  **7**. Null when the cell is not one number. */
 export function parseNumber(cell: string): number | null {
-	let s = cell.replace(/[*_`~=]/g, '').replace(/[\s\u00a0]/g, '').replace(/\u2212/g, '-');
+	let s = cell.replace(/[*_`~=]/g, '').trim().replace(/\u2212/g, '-');
 	if (!s) return null;
 	let neg = false;
 	const paren = /^\((.*)\)$/.exec(s);
@@ -294,7 +294,15 @@ export function parseNumber(cell: string): number | null {
 		s = paren[1]!;
 		neg = true;
 	}
-	s = s.replace(/^([+-]?)[$€£¥₹]/u, '$1').replace(/[$€£¥₹%]$/u, '');
+	const prefix = /^([+-]?)\p{Sc}\s*/u.exec(s);
+	if (prefix) s = `${prefix[1]}${s.slice(prefix[0].length)}`;
+	else s = s.replace(/[\p{Sc}%]$/u, '');
+	s = s.trim();
+	// Spaces can separate groups of three digits. Do not turn "1 2" into 12.
+	if (/\s/u.test(s)) {
+		if (!/^[+-]?\d{1,3}(?:[ \u00a0\u202f]\d{3})+(?:\.\d+)?$/.test(s)) return null;
+		s = s.replace(/\s/gu, '');
+	}
 	if (/^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$/.test(s)) s = s.replace(/,/g, '');
 	if (!/^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/.test(s)) return null;
 	const n = Number(s);
@@ -304,8 +312,10 @@ export function parseNumber(cell: string): number | null {
 
 /** Digits after the decimal point in a number cell (0 for an integer). */
 function decimals(cell: string): number {
-	const m = /\.(\d+)/.exec(cell.replace(/[^\d.]/g, ''));
-	return m ? Math.min(m[1]!.length, MAX_DECIMALS) : 0;
+	const m = /(\d*\.?\d+)(?:[eE]([+-]?\d+))?/.exec(cell.replace(/[,\s]/gu, ''));
+	if (!m) return 0;
+	const fraction = m[1]!.split('.')[1]?.length ?? 0;
+	return Math.min(MAX_DECIMALS, Math.max(0, fraction - Number(m[2] ?? 0)));
 }
 
 /** Formats a number with at most `places` decimals and no trailing zeros. */
@@ -348,13 +358,15 @@ export function mergeColumns(headers: string[][], wanted: string[]): string[] {
 
 /** Header names with a number added to repeated names: Amount, Amount (2). Empty names become Column N. */
 export function uniqueHeader(header: string[]): string[] {
-	const count = new Map<string, number>();
+	const reserved = new Set(header.filter((h) => h.trim()).map(normName));
+	const used = new Set<string>();
 	return header.map((raw, i) => {
 		const base = raw.trim() || `Column ${i + 1}`;
-		const k = normName(base);
-		const n = (count.get(k) ?? 0) + 1;
-		count.set(k, n);
-		return n === 1 ? base : `${base} (${n})`;
+		let name = base;
+		let n = 2;
+		while (used.has(normName(name)) || (!raw.trim() && reserved.has(normName(name))) || (name !== base && reserved.has(normName(name)))) name = `${base} (${n++})`;
+		used.add(normName(name));
+		return name;
 	});
 }
 
