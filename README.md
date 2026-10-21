@@ -5,6 +5,8 @@ Table Rollup merges the Markdown tables from many notes into one table. Table Ro
 Table Rollup is a view for the core Bases plugin. The base selects the notes, and Table Rollup draws one merged table from their tables.
 <img src="https://raw.githubusercontent.com/theluckystrike/table-rollup/HEAD/docs/table-rollup.gif" alt="A base of 20 meeting notes shown as one merged table, sorted by hours, then grouped by owner with subtotals" width="720">
 
+Free: tables from up to 50 notes, sorting, search, embeds, live updates. Pro: summaries, subtotals, filters, exports, task rollups. $15 one time or $5 a month: [Sponsor](https://github.com/sponsors/theluckystrike?metadata_source=table-rollup) or [$15 one-time offer](https://github.com/sponsors/theluckystrike/sponsorships?tier_id=666162&metadata_source=table-rollup).
+
 ## Features
 
 ### One table from many notes
@@ -79,11 +81,10 @@ The free version merges the tables under one heading from up to 50 notes that ha
 
 Pro removes the 50-note limit and adds summary rows, group subtotals, row filters, export to Markdown or CSV, and the task list rollup. To get it:
 
-1. Sponsor [theluckystrike on GitHub Sponsors](https://github.com/sponsors/theluckystrike) with $5 a month, or $15 once. A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply.
-2. In Obsidian, open the settings of Table Rollup and select "Sign in with GitHub".
-3. The plugin copies a code and opens github.com/login/device. Paste the code there and approve.
+1. Sponsor through [GitHub Sponsors](https://github.com/sponsors/theluckystrike?metadata_source=table-rollup). A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply.
+2. In settings, select "Sign in with GitHub" and enter the code at github.com/login/device.
 
-The status line then shows your GitHub login and the tier. If you sponsor after you sign in, select Refresh. A negative answer turns Pro off. Your view options stay saved in the base file and work again when Pro is on.
+The status line shows your account and tier. Refresh after a new sponsorship. A negative answer turns Pro off. Your view options stay saved and work again when Pro is on.
 
 ## Settings
 
@@ -130,6 +131,8 @@ After sign in, Table Rollup sends one query to `https://api.github.com/graphql`.
 After a successful check, Pro can work offline for up to 14 days. Sign out or a negative sponsorship answer turns Pro off. The plugin stores the GitHub token through the secret storage API of Obsidian. It does not put the token in its saved settings or its local sponsorship data. The local storage of this device keeps your GitHub login, the tier and the time of the last check. Sign out clears the token. You can also revoke the access in your GitHub settings, under Applications.
 
 ## Support
+
+Plugin page: [table-rollup](https://notemods.com/plugins/table-rollup/).
 
 Report bugs and feature requests in this repository's GitHub issues. Add your Obsidian version and a small sample note.
 
