@@ -5,6 +5,8 @@ import { SPONSORS, bindPro, isPro, resetPro } from './pro';
 import { DEFAULT_SETTINGS, TableRollupSettingTab, normalizeSettings, type TableRollupSettings } from './settings';
 import { findTables, toCsv, toMarkdown, type Mode, type ParsedTable, type SourceNote } from './table';
 import { RollupView, VIEW_ID, viewOptions } from './view';
+import { setupHello } from './hello/index';
+import WHATS_NEW from './whats-new.json';
 
 interface CacheEntry {
 	mtime: number;
@@ -29,6 +31,8 @@ export default class TableRollupPlugin extends Plugin {
 	private cache = new Map<string, CacheEntry>();
 
 	async onload(): Promise<void> {
+		// First: "What's new" reads its state before the settings load (packages/hello). It does not wait.
+		setupHello(this, WHATS_NEW);
 		await this.loadSettings();
 		// No request here: a request needs a GitHub sign in first (Settings, Pro, Sign in with GitHub).
 		const pro = createGitHubSponsors(this.app, this.manifest.id, SPONSORS, this);
@@ -129,13 +133,13 @@ export default class TableRollupPlugin extends Plugin {
 	}
 
 	/** Pro: writes the merged table of a view to a new Markdown note or CSV file and opens it. */
-	async exportView(view: RollupView, kind: 'markdown' | 'csv'): Promise<TFile | null> {
+	async exportView(view: RollupView | null, kind: 'markdown' | 'csv'): Promise<TFile | null> {
 		if (!isPro()) {
 			RollupView.needsPro('Export');
 			return null;
 		}
-		const r = view.last;
-		if (!r) return null;
+		const r = view?.last;
+		if (!view || !r) return null;
 		const stamp = timeStamp(new Date());
 		const title = `${(view.config.name || 'Table rollup').replace(/[\\/:*?"<>|#^[\]]/g, ' ').trim()} ${stamp}`;
 		const ext = kind === 'markdown' ? 'md' : 'csv';

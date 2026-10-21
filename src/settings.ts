@@ -2,6 +2,7 @@ import { PluginSettingTab, type SettingDefinitionItem } from 'obsidian';
 import { sponsorsSettingItems } from './license/github-obsidian';
 import { FREE_MAX_SOURCES, PRO_UI, isPro } from './pro';
 import type TableRollupPlugin from './main';
+import { helloSettingItems } from './hello/settings';
 
 export interface TableRollupSettings {
 	/** Wait in ms after a note changes before open rollup views redraw. */
@@ -33,6 +34,11 @@ export class TableRollupSettingTab extends PluginSettingTab {
 	}
 
 	getSettingDefinitions(): SettingDefinitionItem[] {
+		// The product rows, then the "More from NoteMods" card (packages/hello).
+		return [...this.productSettingDefinitions(), ...helloSettingItems()];
+	}
+
+	productSettingDefinitions(): SettingDefinitionItem[] {
 		return [
 			...(this.plugin.pro ? sponsorsSettingItems(this.plugin.pro, PRO_UI) : []),
 			{

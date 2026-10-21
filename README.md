@@ -1,6 +1,6 @@
 # Table Rollup
 
-Table Rollup merges the Markdown tables from many notes into one table. Table Rollup shows those rows together, with a link to the note that each row came from. Your data stays in your notes.
+Table Rollup merges the Markdown tables from many notes into one table. Your data stays in your notes.
 
 Table Rollup is a view for the core Bases plugin. The base selects the notes, and Table Rollup draws one merged table from their tables.
 <img src="https://raw.githubusercontent.com/theluckystrike/table-rollup/HEAD/docs/table-rollup.gif" alt="A base of 20 meeting notes shown as one merged table, sorted by hours, then grouped by owner with subtotals" width="720">
@@ -11,19 +11,19 @@ Free: tables from up to 50 notes, sorting, search, embeds, live updates. Pro: su
 
 ### One table from many notes
 
-Each note in the base gives the rows of its table under the heading that you choose. The merged table matches the columns by name. Case, bold text and column order do not matter, so "Owner" and "owner" go into the same column. A column that only some notes have is added at the end. Repeated column names get a number. The number does not replace a name that you wrote in the source table. A Source column links to each note. Hover over the link to see a preview, or Ctrl-click (Cmd-click on macOS) to open the note in a new tab.
+Each note in the base gives the rows of its table under the heading that you choose. The merged table matches the columns by name. Case, bold text and column order do not matter, so "Owner" and "owner" go into the same column. A column that only some notes have is added at the end. Repeated column names get a number. The number does not replace a name that you wrote in the source table. A Source column links to each note.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/table-rollup/HEAD/docs/merge-tables.png" alt="Merged table of 64 action items from 20 meeting notes with a Source column" width="720">
 
 ### Sort by any column
 
-Click a column header to sort the rows. Click again to sort the other way, and a third time to go back to the note order. Numbers sort as numbers, and empty cells stay at the end.
+Click a column header to sort. Click again to reverse, and a third time to restore the note order. Numbers sort as numbers, and empty cells stay at the end.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/table-rollup/HEAD/docs/sort.png" alt="The merged table sorted by the Hours column, largest first" width="720">
 
 ### Find rows
 
-Type in the "Find rows" box above the table to keep only the rows whose cells or source note name hold that text. The match is case insensitive. The summary row and the group subtotals then add up only the rows that are left. Select the X button to show all rows again.
+Type in the "Find rows" box above the table to keep only the rows whose cells or source note name hold that text. The match is case insensitive. The summary row and the group subtotals then add up only the rows that are left. Select X to show all rows.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/table-rollup/HEAD/docs/find-rows.png" alt="The find box above the table with a narrow set of rows" width="720">
 
@@ -41,7 +41,7 @@ Add a summary row with the sum, average, count, smallest or largest value of eac
 
 ### Filter rows (Pro)
 
-Keep only the rows where a column contains, equals or does not equal a value, or where a number is larger or smaller than a value. The summary row then adds up only the rows that are left.
+Keep only the rows where a column contains, equals or does not equal a value, or where a number is larger or smaller than a value. The summary row counts only the remaining rows.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/table-rollup/HEAD/docs/filter.png" alt="Only rows whose status is not done, with the open hours summed" width="720">
 
@@ -81,12 +81,14 @@ The free version merges the tables under one heading from up to 50 notes that ha
 
 Pro removes the 50-note limit and adds summary rows, group subtotals, row filters, export to Markdown or CSV, and the task list rollup. To get it:
 
-1. Sponsor through [GitHub Sponsors](https://github.com/sponsors/theluckystrike?metadata_source=table-rollup). A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply.
+1. Sponsor through [GitHub Sponsors](https://github.com/sponsors/theluckystrike?metadata_source=table-rollup).
 2. In settings, select "Sign in with GitHub" and enter the code at github.com/login/device.
 
-The status line shows your account and tier. Refresh after a new sponsorship. A negative answer turns Pro off. Your view options stay saved and work again when Pro is on.
+The status line shows your account and tier. Refresh after a new sponsorship. Your view options stay saved and work again when Pro is on.
 
 ## Settings
+
+After a minor or major update, this plugin opens one What's new tab in the background. The tab and settings card suggest other NoteMods plugins and Zovo Chat and link to notemods.com for feedback ([privacy](https://notemods.com/privacy/)). The tab sends no data. Turn the tab off in Settings.
 
 The view options are in the base toolbar. They are saved with each view in the base file.
 
@@ -102,7 +104,7 @@ The view options are in the base toolbar. They are saved with each view in the b
 | Group by column (Pro) | A column name, or Source. |
 | Filter column, rule and value (Pro) | Keeps only the rows that match. |
 
-The plugin settings tab has the Pro section (sign in with GitHub, status and Refresh) and one setting, "Live update delay": the time in milliseconds to wait after an edit before the tables draw again, from 100 to 2000. The default is 300.
+The plugin settings tab has the Pro section (sign in with GitHub, status and Refresh), "Live update delay" (ms before a redraw, 100 to 2000, default 300) and the What's new switch.
 
 ## FAQ
 
