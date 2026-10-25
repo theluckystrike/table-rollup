@@ -1,5 +1,6 @@
 {
 	"name": "table-rollup",
+	"repository": {"type": "git", "url": "theluckystrike/table-rollup.git"},
 	"version": "1.2.0",
 	"private": true,
 	"description": "Merges the Markdown tables under one heading in many notes into one sortable table, as a Bases view, with a link to each source note.",
