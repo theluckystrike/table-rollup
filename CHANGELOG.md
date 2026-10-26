@@ -1,5 +1,11 @@
 # table-rollup
 
+## 1.2.1
+
+### Patch Changes
+
+- The Pro notice for merged table export now has a Sponsor on GitHub button.
+
 ## 1.2.0
 
 ### Minor Changes

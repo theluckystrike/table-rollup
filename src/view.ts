@@ -1,6 +1,6 @@
-import { BasesView, Keymap, Notice, TFile, setIcon, type BasesAllOptions, type BasesViewConfig, type HoverParent, type HoverPopover, type QueryController } from 'obsidian';
+import { BasesView, Keymap, TFile, setIcon, type BasesAllOptions, type BasesViewConfig, type HoverParent, type HoverPopover, type QueryController } from 'obsidian';
 import { tokenize, type Token } from './inline';
-import { FREE_MAX_SOURCES, isPro, onProChange } from './pro';
+import { FREE_MAX_SOURCES, isPro, onProChange, proNotice, proText } from './pro';
 import { SOURCE_COLUMN, noteName, rollup, type FilterOp, type Mode, type Rollup, type RollupOptions, type Row, type SourceNote, type SummaryFn, type Which } from './table';
 import type TableRollupPlugin from './main';
 
@@ -107,7 +107,7 @@ export class RollupView extends BasesView implements HoverParent {
 		const files = this.data.data.map((e) => e.file).filter((f): f is TFile => f instanceof TFile && f.extension === 'md');
 		this.paths = new Set(files.map((f) => f.path));
 		if (opts.mode === 'tasks' && !isPro()) {
-			this.drawMessage('The task list rollup is a pro feature. Sponsor on GitHub, then sign in from the plugin settings, or set Read to Tables in the view options.');
+			this.drawMessage(proText('The task list rollup is a pro feature. For a free rollup, set Read to Tables in the view options.'));
 			return;
 		}
 		const notes: SourceNote[] = await Promise.all(files.map((f) => this.plugin.readNote(f, opts.mode ?? 'tables')));
@@ -308,7 +308,7 @@ export class RollupView extends BasesView implements HoverParent {
 
 	/** Shows a notice that a feature needs Pro. */
 	static needsPro(feature: string): void {
-		new Notice(`${feature} is a pro feature. Sponsor on GitHub, then sign in from the plugin settings.`);
+		proNotice(`${feature} is a pro feature.`);
 	}
 }
 
