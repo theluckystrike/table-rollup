@@ -1,5 +1,11 @@
 # table-rollup
 
+## 1.2.2
+
+### Patch Changes
+
+- The Sponsor on GitHub button of Table Rollup now opens the one-time payment tab of GitHub Sponsors.
+
 ## 1.2.1
 
 ### Patch Changes
