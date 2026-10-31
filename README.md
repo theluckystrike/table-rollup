@@ -5,7 +5,17 @@ Table Rollup merges the Markdown tables from many notes into one table. Your dat
 Table Rollup is a view for the core Bases plugin. The base selects the notes, and Table Rollup draws one merged table from their tables.
 <img src="https://raw.githubusercontent.com/theluckystrike/table-rollup/HEAD/docs/table-rollup.gif" alt="A base of 20 meeting notes shown as one merged table, sorted by hours, then grouped by owner with subtotals" width="720">
 
-Free: tables from up to 50 notes, sorting, search, embeds, live updates. Pro: summaries, subtotals, filters, exports, task rollups. $15 one time or $5 a month: [Sponsor](https://github.com/sponsors/theluckystrike?metadata_source=table-rollup) or [$15 one-time offer](https://github.com/sponsors/theluckystrike/sponsorships?tier_id=666162&metadata_source=table-rollup).
+Free: tables from up to 50 notes, sorting, search, embeds, live updates. Pro: summaries, subtotals, filters, exports, task rollups. $15 one time or $5 a month: [Sponsor](https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=table-rollup) or [$15 one-time offer](https://github.com/sponsors/theluckystrike/sponsorships?tier_id=666162&metadata_source=table-rollup).
+
+## Quick start
+
+```markdown
+| Task | Owner | Hours |
+| --- | --- | --- |
+| Draft the plan | Ana | 2 |
+```
+
+Create a base, or open one. Select the view menu in the base toolbar and add a view of the type "Table rollup". Leave "Under heading" empty to use the first table of each note. A Source column links to each note.
 
 ## Features
 
@@ -81,7 +91,7 @@ The free version merges the tables under one heading from up to 50 notes that ha
 
 Pro removes the 50-note limit and adds summary rows, group subtotals, row filters, export to Markdown or CSV, and the task list rollup. To get it:
 
-1. Sponsor through [GitHub Sponsors](https://github.com/sponsors/theluckystrike?metadata_source=table-rollup).
+1. Sponsor through [GitHub Sponsors](https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=table-rollup).
 2. In settings, select "Sign in with GitHub" and enter the code at github.com/login/device.
 
 The status line shows your account and tier. Refresh after a new sponsorship. Your view options stay saved and work again when Pro is on.
@@ -124,7 +134,7 @@ SQLSeal reads a Markdown table, but you write one query line for each file and e
 
 The core features are free. Pro features need a GitHub Sponsors sponsorship of theluckystrike: $5 a month or more, or $15 once. A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply. Your notes stay readable and editable with or without Pro.
 
-GitHub handles the payment. Sponsor at https://github.com/sponsors/theluckystrike. You need no account for the free features. Pro needs the GitHub account that sponsors.
+GitHub handles the payment. Sponsor at https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=table-rollup. You need no account for the free features. Pro needs the GitHub account that sponsors.
 
 Until you select "Sign in with GitHub" in the settings, Table Rollup makes no network requests. Sign in uses the GitHub device flow. Table Rollup sends its public client ID and the scope `read:user` to `https://github.com/login/device/code` and shows you a code. While you enter the code at https://github.com/login/device, it asks `https://github.com/login/oauth/access_token` every few seconds to check the sign-in status. The scope permits profile reads only. GitHub needs this access to show the sponsorship tier. It grants no repository scope and no write access.
 
