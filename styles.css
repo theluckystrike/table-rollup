@@ -20,6 +20,10 @@
 	color: var(--text-warning);
 }
 
+.table-rollup-pro-hint {
+	cursor: pointer;
+}
+
 .table-rollup-find {
 	display: flex;
 	align-items: center;
