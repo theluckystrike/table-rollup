@@ -94,7 +94,7 @@ Pro removes the 50-note limit and adds summary rows, group subtotals, row filter
 1. Sponsor through [GitHub Sponsors](https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=table-rollup).
 2. In settings, select "Sign in with GitHub" and enter the code at github.com/login/device.
 
-The status line shows your account and tier. Refresh after a new sponsorship. Your view options stay saved and work again when Pro is on.
+The status line shows your account and tier. Your view options stay saved and work again when Pro is on.
 
 ## Settings
 
@@ -114,7 +114,7 @@ The view options are in the base toolbar. They are saved with each view in the b
 | Group by column (Pro) | A column name, or Source. |
 | Filter column, rule and value (Pro) | Keeps only the rows that match. |
 
-The plugin settings tab has the Pro section (sign in with GitHub, status and Refresh), "Live update delay" (ms before a redraw, 100 to 2000, default 300) and the What's new switch.
+The settings tab has the Pro section (sign in, status and Refresh), "Live update delay" (ms before a redraw, 100 to 2000, default 300) and the What's new switch.
 
 ## FAQ
 
@@ -133,6 +133,8 @@ SQLSeal reads a Markdown table, but you write one query line for each file and e
 ## Payment, account and network
 
 The core features are free. Pro features need a GitHub Sponsors sponsorship of theluckystrike: $5 a month or more, or $15 once. A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply. Your notes stay readable and editable with or without Pro.
+
+[One payment turns on Pro in every NoteMods plugin](https://notemods.com/pro/).
 
 GitHub handles the payment. Sponsor at https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=table-rollup. You need no account for the free features. Pro needs the GitHub account that sponsors.
 
