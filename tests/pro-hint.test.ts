@@ -5,7 +5,7 @@ const state = vi.hoisted(() => ({ pro: false }));
 const proNotice = vi.hoisted(() => vi.fn());
 vi.mock('../src/pro', async (orig) => {
 	const real = await orig<typeof import('../src/pro')>();
-	return { ...real, isPro: () => state.pro, proNotice, proText: (lead: string) => `${lead} Sponsor on GitHub, then sign in from the plugin settings.` };
+	return { ...real, isPro: () => state.pro, proNotice, proText: (lead: string) => `${lead} One payment turns on Pro in every NoteMods plugin. Sponsor on GitHub, then sign in from the plugin settings.` };
 });
 
 import { RollupView } from '../src/view';
@@ -35,7 +35,7 @@ describe('Pro view options for a free user', () => {
 	it('names the ignored Summary row in the bar and shows the shared Pro notice', () => {
 		const { el, draw } = makeView({ summary: 'sum' });
 		draw();
-		expect(hint(el)).toBe('Summary row is a pro option. This view does not use it. Sponsor on GitHub, then sign in from the plugin settings.');
+		expect(hint(el)).toBe('Summary row is a pro option. This view does not use it. One payment turns on Pro in every NoteMods plugin. Sponsor on GitHub, then sign in from the plugin settings.');
 		expect(proNotice).toHaveBeenCalledTimes(1);
 		expect(proNotice).toHaveBeenCalledWith('Summary row is a pro option. This view does not use it.');
 	});

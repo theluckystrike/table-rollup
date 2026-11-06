@@ -1,7 +1,7 @@
 {
 	"id": "table-rollup",
 	"name": "Table Rollup",
-	"version": "1.2.3",
+	"version": "1.2.4",
 	"minAppVersion": "1.13.4",
 	"description": "Combine the Markdown tables from many notes into one sortable table in a Bases view. Merge tables by column name, with a link to each source note.",
 	"author": "Michael Lip",

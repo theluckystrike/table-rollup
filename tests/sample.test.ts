@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { rollup } from '../src/table';
+import { GROWTH_LIMIT, growth } from './growth';
 
 // The sample vault in docs/sample-notes is also the end-to-end vault. These numbers are the same ones the
 // end-to-end test checks in the real app.
@@ -33,18 +34,21 @@ describe('sample vault (20 meeting notes)', () => {
 		expect(r.rows).toHaveLength(20);
 		expect(r.sources).toBe(10);
 	});
-	it('500 notes merge in well under the 300 ms budget (pure part, median of 5 after a warm-up)', () => {
-		const many = Array.from({ length: 500 }, (_, i) => ({ path: `p/${i}.md`, markdown: notes[i % 20]!.markdown }));
+	it('2,000 notes merge in linear time (pure part)', () => {
+		// The product budget is 300 ms for 500 notes on a quiet machine. A wall-clock limit (300 ms strict, 1,500 ms
+		// default) depends on the speed of the runner; under a parallel fx check the median reached 443 ms, and a CI
+		// runner can be 9 times slower than the agent Mac. The guard divides the time for 2,000 notes by the time for 200
+		// notes, lowest time of each size over 5 rounds, both measured in this test (s1103b ASSERT-B, Procedure AC).
+		// 2,000 notes and not 500: an insertion sort of the rows (plant tr-insertion-sort) gave 44 at 500 notes, too
+		// close to the limit of 40.
+		const many = (n: number) => Array.from({ length: n }, (_, i) => ({ path: `p/${i}.md`, markdown: notes[i % 20]!.markdown }));
 		const opts = { heading: 'Action items', summary: 'sum', sort: { column: 'Hours', dir: 'desc' } } as const;
-		expect(rollup(many, opts).rows).toHaveLength(1600);
-		const times = Array.from({ length: 5 }, () => {
-			const t0 = performance.now();
-			rollup(many, opts);
-			return performance.now() - t0;
-		}).sort((a, b) => a - b);
-		// 300 ms is the product budget (FX_PERF_STRICT=1, quiet machine). Under a parallel fx check on a busy
-		// machine the median reached 443 ms, so the default ceiling only catches algorithmic regressions.
-		const budget = process.env.FX_PERF_STRICT === '1' ? 300 : 1500;
-		expect(times[2]!).toBeLessThan(budget);
+		expect(rollup(many(500), opts).rows).toHaveLength(1600);
+		expect(rollup(many(2000), opts).rows).toHaveLength(6400);
+		const g = growth((n) => {
+			const input = many(n);
+			return () => rollup(input, opts);
+		}, 2000);
+		expect(g.ratio, g.text).toBeLessThan(GROWTH_LIMIT);
 	});
 });
