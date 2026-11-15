@@ -129,8 +129,8 @@ export class RollupView extends BasesView implements HoverParent {
 
 	private draw(r: Rollup, opts: ReturnType<RollupView['options']>): void {
 		const el = this.containerEl;
-		const active = document.activeElement;
-		const keepFind = active instanceof HTMLInputElement && el.contains(active) && active.classList.contains('table-rollup-find-input');
+		const active = el.doc.activeElement;
+		const keepFind = active?.instanceOf(HTMLInputElement) === true && el.contains(active) && active.classList.contains('table-rollup-find-input');
 		const caret = keepFind ? active.selectionStart : null;
 		// A live update can draw again while the user types: keep the typed text, not the saved one.
 		const typed = keepFind ? active.value : null;
